@@ -33,6 +33,7 @@ lib/constant/strings.dart
 .pub/
 /build/
 /lib/constants/
+/lib/Authenticatiin/
 
 # Symbolication related
 app.*.symbols
