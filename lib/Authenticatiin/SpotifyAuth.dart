@@ -3,26 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 
-// Future<void> authenticateWithSpotify() async {
-//   final redirectUri = Uri.parse('https://google.com');
-//   final authorizationUrl = 'https://accounts.spotify.com/authorize?'
-//       'client_id=1b38a4bdaa0a4f22b22ac357fce5046c'
-//       '&response_type=code'
-//       '&redirect_uri=${Uri.encodeComponent(redirectUri.toString())}'
-//       '&scope=user-read-private%20user-read-email'; // Define your required scopes
-
-//   try {
-//     final result = await FlutterWebAuth.authenticate(
-//       url: authorizationUrl,
-//       callbackUrlScheme: redirectUri.scheme,
-//     );
-
-//     // Parse the result (authorization code or access token) and proceed with API requests
-//   } catch (e) {
-//     print("Failed the authentication");
-//   }
-// }
-
 final redirectUri = Uri.parse('https://google.com');
 Future<void> authenticateWithSpotify() async {
   final authorizationUrl = 'https://accounts.spotify.com/authorize?'

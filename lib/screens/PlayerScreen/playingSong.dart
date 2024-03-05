@@ -9,7 +9,7 @@ import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 import 'package:musiclify/constants/strings.dart';
 import 'package:musiclify/models/music.dart';
-import 'package:musiclify/screens/lyrics_page.dart';
+import 'package:musiclify/screens/LyricsScreen/lyrics_page.dart';
 
 class PlayingSong extends StatefulWidget {
   const PlayingSong({super.key});
@@ -187,10 +187,9 @@ class _PlayingSongState extends State<PlayingSong>
         backgroundColor: musicModel.songColorm,
         builder: (context) => Container(
           height: Sizes.height * 0.8,
-          child: LyricsPage(
-            music: musicModel,
-            player: AudioPlayer(),
-          ),
+          // child: LyricsPage(
+          //   player: AudioPlayer(),
+          // ),
         ),
       );
     }

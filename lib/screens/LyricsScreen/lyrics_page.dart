@@ -109,27 +109,27 @@
 
 import 'dart:async';
 
-import 'package:audioplayers/audioplayers.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:musiclify/models/LyricsModel.dart';
 import 'package:musiclify/models/music.dart';
+import 'package:musiclify/provider/GetTrackInfoEventProvider.dart';
+import 'package:provider/provider.dart';
 
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class LyricsPage extends StatefulWidget {
-  final MusicModel music;
   final AudioPlayer player;
 
-  const LyricsPage({super.key, required this.music, required this.player});
+  const LyricsPage({super.key, required this.player});
 
   @override
   State<LyricsPage> createState() => _LyricsPageState();
 }
 
 class _LyricsPageState extends State<LyricsPage> {
-  List<LyricsModel>? lyrics;
   final ItemScrollController itemScrollController = ItemScrollController();
   final ScrollOffsetController scrollOffsetController =
       ScrollOffsetController();
@@ -147,7 +147,14 @@ class _LyricsPageState extends State<LyricsPage> {
 
   @override
   void initState() {
-    streamSubscription = widget.player.onPositionChanged.listen((duration) {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = Provider.of<GetTrackInfoEventProvider>(context);
+    final lyrics = provider.lyrics;
+    streamSubscription = widget.player.positionStream.listen((duration) {
       DateTime dt = DateTime(1970, 1, 1).copyWith(
           hour: duration.inHours,
           minute: duration.inMinutes.remainder(60),
@@ -162,22 +169,6 @@ class _LyricsPageState extends State<LyricsPage> {
         }
       }
     });
-    get(Uri.parse(
-            'https://paxsenixofc.my.id/server/getLyricsMusix.php?q=${widget.music.songName} ${widget.music.artistName}&type=default'))
-        .then((response) {
-      String data = response.body;
-      lyrics = data
-          .split('\n')
-          .map((e) => LyricsModel(e.split(' ').sublist(1).join(' '),
-              DateFormat("[mm:ss.SS]").parse(e.split(' ')[0])))
-          .toList();
-      setState(() {});
-    });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return lyrics != null
         ? SafeArea(
             bottom: false,
@@ -185,7 +176,7 @@ class _LyricsPageState extends State<LyricsPage> {
               padding: const EdgeInsets.symmetric(horizontal: 20.0)
                   .copyWith(top: 20),
               child: StreamBuilder<Duration>(
-                  stream: widget.player.onPositionChanged,
+                  stream: widget.player.positionStream,
                   builder: (context, snapshot) {
                     return ScrollablePositionedList.builder(
                       itemCount: lyrics!.length,
